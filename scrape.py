@@ -33,7 +33,10 @@ def parse_ingredient(ingredient):
          cleand_ingredients[c] = []
 
     number_categories = min(len(ingredient_parts), len(categories))
-    for s in range(number_categories):
+    start = 0
+    # if not(is_number(ingredient_parts[0])):
+    #     start += 2
+    for s in range(start, number_categories):
         cleand_ingredients[categories[s]] = ingredient_parts[s]
 
     return cleand_ingredients
