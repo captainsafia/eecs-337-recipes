@@ -1,0 +1,23 @@
+{
+  "name": "eecs-337-recipes",
+  "version": "1.0.0",
+  "description": "Repo for recipes assignment for EECS337",
+  "main": "fetch_recipe.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/captainsafia/eecs-337-recipes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/captainsafia/eecs-337-recipes/issues"
+  },
+  "homepage": "https://github.com/captainsafia/eecs-337-recipes#readme",
+  "dependencies": {
+    "@captainsafia/ratatouille": "^1.2.0"
+  }
+}

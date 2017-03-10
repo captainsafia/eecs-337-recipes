@@ -8,6 +8,7 @@ const data = {
   readyInTime: recipe.readyInTime,
   cookTime: recipe.cookTime,
   calories: recipe.calories,
+  servings: recipe.servings,
   prepTime: recipe.prepTime,
   ingredients: recipe.ingredients,
   steps: recipe.steps,
