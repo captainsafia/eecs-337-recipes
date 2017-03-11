@@ -5,6 +5,7 @@ const url = process.argv[2];
 const recipe = new Ratatouille.default(url);
 
 const data = {
+  name: recipe.name,
   readyInTime: recipe.readyInTime,
   cookTime: recipe.cookTime,
   calories: recipe.calories,
