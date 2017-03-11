@@ -65,8 +65,33 @@ def is_vegan(recipe):
             return False
     return True
 
+def get_key_from_value(dictionary, value):
+    for key, val in dictionary.iteritems():
+        if val == value:
+            return key
+    return None
+
 def from_vegan(recipe):
-    pass
+    ingredients = recipe['ingredients']
+    vegan = vegan_substitutes.values()
+    for ingredient in ingredients:
+        element = contains_substring(ingredient['name'], vegan)
+        if element != '':
+            ingredient['name'] = get_key_from_value(vegan_substitutes, element)
+
+    steps = recipe['steps']
+    for step in steps:
+        new_step = ''
+        for phrase in step['raw'].split(' '):
+            if phrase in vegan:
+                new_step += get_key_from_value(vegan_substitutes, phrase) + ' '
+            else:
+                new_step += phrase + ' '
+        step['raw'] = new_step
+
+    recipe['ingredients'] = ingredients
+    recipe['steps'] = steps
+    return recipe
 
 def to_vegan(recipe):
     ingredients = recipe['ingredients']
@@ -78,9 +103,13 @@ def to_vegan(recipe):
 
     steps = recipe['steps']
     for step in steps:
-        for phrase in step['raw']:
+        new_step = ''
+        for phrase in step['raw'].split(' '):
             if phrase in not_vegan:
-                step['raw'] = step['raw'].replace(phrase, vegan_substitutes[phrase])
+                new_step += vegan_substitutes[phrase] + ' '
+            else:
+                new_step += phrase + ' '
+        step['raw'] = new_step
 
     recipe['ingredients'] = ingredients
     recipe['steps'] = steps
