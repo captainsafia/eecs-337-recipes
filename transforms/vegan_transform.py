@@ -1,4 +1,5 @@
 import json
+import os
 from pprint import pprint
 
 vegan_substitutes = {
@@ -33,10 +34,12 @@ vegan_substitutes = {
     'pheasant': 'eggplant',
     'goose': 'eggplant',
     'egg': 'chia seed mixture',
-    'milk': 'almond milk'
+    'milk': 'almond milk',
+    'cheese': 'vegan cheese'
 }
 
 def print_recipe(recipe):
+    print(recipe['name'])
     print('Ingredients')
     for ingredient in recipe['ingredients']:
         print('- ', ingredient.get('quantity', ''), ' ',
@@ -47,12 +50,48 @@ def print_recipe(recipe):
     print('Recipe')
     for index, step in enumerate(recipe['steps']):
         print(index + 1, '. ', step.get('raw', ''), sep='')
+    print('\n\n')
 
 def contains_substring(value, elements):
     for element in elements:
         if element in value:
             return element
     return ''
+
+def is_vegan(recipe):
+    not_vegan = vegan_substitutes.keys()
+    for ingredient in recipe['ingredients']:
+        if contains_substring(ingredient['name'], not_vegan):
+            return False
+    return True
+
+def get_key_from_value(dictionary, value):
+    for key, val in dictionary.iteritems():
+        if val == value:
+            return key
+    return None
+
+def from_vegan(recipe):
+    ingredients = recipe['ingredients']
+    vegan = vegan_substitutes.values()
+    for ingredient in ingredients:
+        element = contains_substring(ingredient['name'], vegan)
+        if element != '':
+            ingredient['name'] = get_key_from_value(vegan_substitutes, element)
+
+    steps = recipe['steps']
+    for step in steps:
+        new_step = ''
+        for phrase in step['raw'].split(' '):
+            if phrase in vegan:
+                new_step += get_key_from_value(vegan_substitutes, phrase) + ' '
+            else:
+                new_step += phrase + ' '
+        step['raw'] = new_step
+
+    recipe['ingredients'] = ingredients
+    recipe['steps'] = steps
+    return recipe
 
 def to_vegan(recipe):
     ingredients = recipe['ingredients']
@@ -64,16 +103,31 @@ def to_vegan(recipe):
 
     steps = recipe['steps']
     for step in steps:
-        for phrase in step['raw']:
+        new_step = ''
+        for phrase in step['raw'].split(' '):
             if phrase in not_vegan:
-                step['raw'] = step['raw'].replace(phrase, vegan_substitutes[phrase])
+                new_step += vegan_substitutes[phrase] + ' '
+            else:
+                new_step += phrase + ' '
+        step['raw'] = new_step
 
     recipe['ingredients'] = ingredients
     recipe['steps'] = steps
     return recipe
 
 if __name__ == '__main__':
-    with open('recipe.json') as recipe_file:
-        data = json.load(recipe_file)
-        veganized = to_vegan(data)
-        print_recipe(veganized)
+    recipes = [
+        './recipes/mac-cheese-casserole.json',
+        './recipes/mac-cheese.json',
+        './recipes/sugar-cookies.json'
+    ]
+    directory = os.path.dirname(os.path.realpath('__file__'))
+    for recipe in recipes:
+        filename = os.path.join(directory, recipe)
+        with open(filename) as recipe_file:
+            data = json.load(recipe_file)
+            if not is_vegan(data):
+                transformed = to_vegan(data)
+            else:
+                transformed = from_vegan(data)
+            print_recipe(transformed)

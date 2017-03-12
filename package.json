@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/captainsafia/eecs-337-recipes#readme",
   "dependencies": {
-    "@captainsafia/ratatouille": "^1.2.0"
+    "@captainsafia/ratatouille": "^1.3.0"
   }
 }
