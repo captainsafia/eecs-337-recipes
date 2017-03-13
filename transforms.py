@@ -11,6 +11,7 @@ if len(args == 2):
     elif args[0] == "-vegan":
         exit()
     elif args[0] == "-thai":
+    	print(thai_transform.run(args[1]))
         exit()
 
 else:

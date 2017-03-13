@@ -129,6 +129,14 @@ def thaify(recipe):
     recipe['steps'] = steps
     return recipe
 
+def run(path):
+    with open(path) as recipe:
+        curr = json.load(recipe)
+    if not is_thai(curr):
+        print_recipe(thaify(curr))
+    else:
+        print('Recipe is already Thai!')     
+
 if __name__ == '__main__':
     recipes = [
         './recipes/mac-cheese-casserole.json',
