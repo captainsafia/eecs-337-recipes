@@ -98,7 +98,7 @@ if __name__ == '__main__':
         trans = healthy_trans(args[0])
     elif len(args) == 2:
         if args[1] == "-from":
-            print("not yet ;)")
+            trans = healthy_trans(args[0], False)
     else:
         print("usage: python healthy_transform.py <recipe_path>")
         exit()
